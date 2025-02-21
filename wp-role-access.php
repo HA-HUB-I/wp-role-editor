@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Dynamic Role & UI Manager + Export/Import
  * Description: Dynamically manage role capabilities, hide select admin UI elements, and export/import settings.
- * Version: 1.0
- * Author: Your Name
+ * Version: 2.0
+ * Author: Gencloud
  * License: GPL2
  */
 
