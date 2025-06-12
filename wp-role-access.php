@@ -9,6 +9,11 @@
 
 defined('ABSPATH') || exit;
 
+// Plugin version constant used in export data
+if ( ! defined( 'DRM_PLUGIN_VERSION' ) ) {
+    define( 'DRM_PLUGIN_VERSION', '2.0' );
+}
+
 /**
  * --------------------------------------------------------
  * SECTION 1: Add the main Admin Menu Page
@@ -134,6 +139,7 @@ function drm_render_caps_section() {
 }
 
 function drm_process_caps_form( $form_data ) {
+    $form_data = wp_unslash( $form_data );
     if ( empty( $form_data['drm_caps'] ) ) {
         $submitted_caps = array();
     } else {
@@ -269,6 +275,7 @@ function drm_render_ui_section() {
 }
 
 function drm_process_ui_form( $form_data ) {
+    $form_data   = wp_unslash( $form_data );
     $submitted_ui = ! empty( $form_data['drm_ui'] ) ? $form_data['drm_ui'] : array();
     update_option( 'drm_ui_hide_settings', $submitted_ui );
 
@@ -477,7 +484,7 @@ function drm_build_export_data() {
 
     // Return combined data
     return array(
-        'plugin_version' => '1.0',
+        'plugin_version' => DRM_PLUGIN_VERSION,
         'generated_at'   => gmdate('c'),
         'capabilities'   => $roles_caps_data,
         'ui_hiding'      => $ui_hide_settings,
@@ -488,6 +495,7 @@ function drm_build_export_data() {
  * 5.3: Process Import
  */
 function drm_process_import_form( $form_data ) {
+    $form_data = wp_unslash( $form_data );
     $json_raw = isset($form_data['drm_import_json']) ? trim($form_data['drm_import_json']) : '';
     if ( empty($json_raw) ) {
         add_action( 'admin_notices', function(){
@@ -514,7 +522,7 @@ function drm_process_import_form( $form_data ) {
     } elseif ( 'choose' === $roles_mode ) {
         // Use only those selected in the checkboxes
         if ( ! empty($form_data['drm_import_roles_array']) && is_array($form_data['drm_import_roles_array']) ) {
-            $roles_to_import = $form_data['drm_import_roles_array'];
+            $roles_to_import = array_map( 'wp_unslash', $form_data['drm_import_roles_array'] );
         }
     }
 
